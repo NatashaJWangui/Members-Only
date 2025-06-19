@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="header-section">
+    <h1>The Members Only Clubhouse</h1>
+    
+    <div class="user-info">
+      <% if user_signed_in? %>
+        <p>Welcome back, <%= current_user.name %>!</p>
+        <%= link_to 'Share a Secret', new_post_path, class: "btn btn-success" %>
+        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete, class: "btn btn-outline-danger" %>
+      <% else %>
+        <p>You can see the secrets, but only members know who wrote them...</p>
+        <%= link_to 'Sign In', new_user_session_path, class: "btn btn-primary" %>
+        <%= link_to 'Join the Club', new_user_registration_path, class: "btn btn-success" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="posts-section">
+    <h2>Secret Posts</h2>
+    
+    <% if @posts.any? %>
+      <% @posts.each do |post| %>
+        <div class="post">
+          <h3><%= post.title %></h3>
+          <p><%= post.body %></p>
+          
+          <div class="post-meta">
+            <!-- Only show author if user is signed in -->
+            <% if user_signed_in? %>
+              <small class="text-muted">
+                Written by: <strong><%= post.user.name %></strong> 
+                on <%= post.created_at.strftime("%B %d, %Y") %>
+              </small>
+            <% else %>
+              <small class="text-muted">
+                Written by: <strong>Secret Member</strong> 
+                on <%= post.created_at.strftime("%B %d, %Y") %>
+              </small>
+            <% end %>
+          </div>
+        </div>
+        <hr>
+      <% end %>
+    <% else %>
+      <p>No secrets have been shared yet. Be the first!</p>
+    <% end %>
+  </div>
+</div>
